@@ -1,6 +1,8 @@
 require_relative 'path'
 
 class FileRenamer
+  SLASH = Gem.win_platform? ? '\\' : '/'
+
   attr_reader :params, :paths 
 
   def initialize(params)
@@ -10,46 +12,56 @@ class FileRenamer
 
   def get_paths
     dir = correct_dir
+    return dir unless dir 
 
-    return nil unless dir 
-
-    params = path_params 
+    params_correction
 
     Dir["#{dir}*"].each do |path|
-      @paths << Path.new(path, *params) 
+      @paths << Path.new(path, params) 
     end 
   end 
 
   def rename_files!
-    @paths.each do |p|
-      p.rename_file! 
+    @paths.each_with_index do |p, i|
+      p.rename_file!(i+1) if p.correct_path?
     end
   end 
 
   private 
 
-  def path_params
-    [correct_name, correct_prefix, correct_ext]
+  def params_correction
+    correct_name
+    correct_prefix
+    correct_ext
   end 
 
   def correct_dir
-    if @params[:path] && File.directory?(@params[:path])
-      @params[:path] << '/' unless @params[:path][-1] == '/'
-      return @params[:path]
+    @params[:path] << SLASH unless @params[:path][-1] == SLASH 
+    
+    if File.directory?(@params[:path])
+      return @params[:path] 
     end 
+
+    @params[:path] =  nil 
   end
 
   def correct_name
-    return @params[:name].gsub(' ', '_') if @params[:name] && @params[:name].match?(/^[a-zA-Z_0-9-]+$/)
+    if @params[:name] && @params[:name].match?(/^[a-zA-Z_0-9 -]+$/)
+      @params[:name] = @params[:name].strip!.gsub(' ', '_') 
+    else 
+      @params[:name] = nil 
+    end 
   end 
 
   def correct_prefix
-    @params[:prefix].strip if @params[:prefix]
+    @params[:prefix] = @params[:prefix].strip if @params[:prefix]
   end 
 
   def correct_ext
     if @params[:ext] && @params[:ext].match?(/^[a-zA-Z0-9]{1,4}$/)
-      return '.' + @params[:ext] if @params[:ext][0] == '.'
+      @params[:ext] = '.' + @params[:ext] unless @params[:ext][0] == '.'
+    else 
+      @params[:ext] = nil 
     end 
   end 
 end 
