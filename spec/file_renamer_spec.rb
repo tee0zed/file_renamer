@@ -1,6 +1,45 @@
 require 'file_renamer'
+require 'byebug'
 
 describe 'FileRenamer' do 
+  context '#get_paths' do 
+    before(:each) { 
+      i = 1 
+      3.times do 
+        File.write("./spec/fixtures/dir/file#{i}.txt", "")
+        i += 1
+      end 
+
+      i = 1 
+      3.times do 
+        File.write("./spec/fixtures/dir/pict#{i}.jpg", "")
+        i += 1
+      end 
+    }
+
+    after(:each) {
+      Dir["./spec/fixtures/dir/*"].each do |f|
+        File.delete(f) if File.exists? f
+      end 
+    }
+
+    let(:params1) {{ path: "./spec/fixtures/dir/", ext: nil, prefix: nil }}
+    let(:obj1) { FileRenamer.new(params1) }
+    it 'returns all Path objects' do 
+      obj1.get_paths
+
+      expect(obj1.paths.count).to eq 6
+      expect(obj1.paths.all?{|o| o.is_a? Path}).to eq true 
+      expect(obj1.paths.map(&:path)).to match_array ["./spec/fixtures/dir/pict3.jpg", 
+                                                     "./spec/fixtures/dir/pict2.jpg", 
+                                                     "./spec/fixtures/dir/pict1.jpg", 
+                                                     "./spec/fixtures/dir/file1.txt",
+                                                     "./spec/fixtures/dir/file2.txt", 
+                                                     "./spec/fixtures/dir/file3.txt" ]
+
+    end 
+  end 
+
   context '#correct_ext' do
     let(:params) {{ ext: 'jpg' }}
     let(:obj) { FileRenamer.new(params) } 

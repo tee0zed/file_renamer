@@ -3,39 +3,51 @@ require 'path'
 describe "Path" do 
   context "#correct_path?" do 
     let(:params1) {{ name: 'new_name', prefix: nil, ext: nil }}
-    let(:no_opt_params) { Path.new('/Documents/DCIM_123.jpg', params1)} 
+    let(:no_opt_params1) { Path.new('/Documents/DCIM_123.jpg', params1)} 
+    let(:no_opt_params2) { Path.new('/Documents/ANOTHER_1123133.jpg', params1)} 
     it "return true for all paths without options" do
-      expect(no_opt_params.correct_path?).to eq true 
+      expect(no_opt_params1.correct_path?).to eq true 
+      expect(no_opt_params2.correct_path?).to eq true 
     end 
 
     let(:params2) {{ name: 'new_name', prefix: 'DCIM', ext: '.jpg' }}
-    let(:with_options_params_correct) { Path.new('/Documents/DCIM_123.jpg', params2) }
+    let(:with_options_params_correct1) { Path.new('/Documents/DCIM_1asdasdggqeda23.jpg', params2) }
+    let(:with_options_params_correct2) { Path.new('/Documents/DCIM_1f12fsa23.jpg', params2) }
     it "return true if options matches path" do 
-      expect(with_options_params_correct.correct_path?).to eq true 
+      expect(with_options_params_correct1.correct_path?).to eq true 
+      expect(with_options_params_correct2.correct_path?).to eq true 
     end 
 
     let(:params3) {{ name: 'new_name', prefix: 'DCIM', ext: nil }}
-    let(:with_prefix_correct) { Path.new('/Documents/DCIM_123.png', params3) }
+    let(:with_prefix_correct1) { Path.new('/Documents/DCIM_1asdads123223.jpg', params3) }
+    let(:with_prefix_correct2) { Path.new('/Documents/DCIM_1addsa23.png', params3) }
     it "return true if prefix matches path" do 
-      expect(with_prefix_correct.correct_path?).to eq true 
+      expect(with_prefix_correct1.correct_path?).to eq true 
+      expect(with_prefix_correct2.correct_path?).to eq true 
     end 
 
     let(:params4) {{ name: 'new_name', prefix: nil, ext: '.jpg' }}
-    let(:with_ext_correct) { Path.new('/Documents/IMG_123.jpg', params4) }
+    let(:with_ext_correct1) { Path.new('/Documents/ANOTHER_124143.jpg', params4) }
+    let(:with_ext_correct2) { Path.new('/Documents/IMG_12122133.jpg', params4) }
     it "return true if extension matches path" do 
-      expect(with_ext_correct.correct_path?).to eq true 
+      expect(with_ext_correct1.correct_path?).to eq true 
+      expect(with_ext_correct2.correct_path?).to eq true 
     end 
 
-    let(:params5) {{ name: 'new_name', prefix: 'IMG', ext: '.png' }}
-    let(:with_options_params_incorrect) { Path.new('/Documents/IMG_123.jpg', params5) }
+    let(:params5) {{ name: 'new_name', prefix: 'DCIM', ext: '.jpg' }}
+    let(:with_prefix_incorrect1) { Path.new('/Documents/IDCIMMG_114223.jpg', params5) }
+    let(:with_prefix_incorrect2) { Path.new('/Documents/IMGDCIMDCIM_12131123.jpg', params5) }
     it "return false if prefix not matches path" do 
-      expect(with_options_params_incorrect.correct_path?).to eq false 
+      expect(with_prefix_incorrect1.correct_path?).to eq false 
+      expect(with_prefix_incorrect2.correct_path?).to eq false 
     end 
 
     let(:params6) {{ name: 'new_name', prefix: 'IMG', ext: '.jpg' }}
-    let(:with_options_params_incorrect) { Path.new('/Documents/DCIM_123.jpg', params6) }
+    let(:with_ext_incorrect1) { Path.new('/Documents/IMG_123.png', params6) }
+    let(:with_ext_incorrect2) { Path.new('/Documents/IMG_123.txt', params6) }
     it "return false if extension not matches path" do 
-      expect(with_options_params_incorrect.correct_path?).to eq false 
+      expect(with_ext_incorrect1.correct_path?).to eq false 
+      expect(with_ext_incorrect2.correct_path?).to eq false 
     end 
   end 
 
