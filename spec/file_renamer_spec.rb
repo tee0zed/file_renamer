@@ -1,5 +1,5 @@
+
 require 'file_renamer'
-require 'byebug'
 
 describe 'FileRenamer' do 
   context '#get_paths' do 
@@ -23,7 +23,7 @@ describe 'FileRenamer' do
       end 
     }
 
-    let(:params1) {{ path: "./spec/fixtures/dir/", ext: nil, prefix: nil }}
+    let(:params1) {{ dir: "./spec/fixtures/dir/", ext: nil, prefix: nil, name: 'new_name' }}
     let(:obj1) { FileRenamer.new(params1) }
     it 'returns all Path objects' do 
       obj1.get_paths
@@ -64,25 +64,25 @@ describe 'FileRenamer' do
   end 
 
   context '#correct_dir' do
-    let(:params) {{ path: './spec/fixtures/dir/' }}
+    let(:params) {{ dir: './spec/fixtures/dir/' }}
     let(:obj) { FileRenamer.new(params) } 
     it 'return dir string if dir exists' do 
       obj.send(:correct_dir)
-      expect(obj.params[:path]).to eq './spec/fixtures/dir/'
+      expect(obj.params[:dir]).to eq './spec/fixtures/dir/'
     end 
 
-    let(:params1) {{ path: './spec/fixtures/dir2/' }}
+    let(:params1) {{ dir: './spec/fixtures/dir2/' }}
     let(:obj1) { FileRenamer.new(params1) } 
     it 'return nil if dir does not exists' do 
       obj1.send(:correct_dir)
-      expect(obj1.params[:path]).to eq nil
+      expect(obj1.params[:dir]).to eq nil
     end 
 
-    let(:params2) {{ path: './spec/fixtures/dir' }}
+    let(:params2) {{ dir: './spec/fixtures/dir' }}
     let(:obj2) { FileRenamer.new(params2) } 
     it 'add slash to the end of path' do 
       obj2.send(:correct_dir)
-      expect(obj2.params[:path]).to eq './spec/fixtures/dir/'
+      expect(obj2.params[:dir]).to eq './spec/fixtures/dir/'
     end 
   end 
 

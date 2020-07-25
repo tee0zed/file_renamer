@@ -1,7 +1,15 @@
+require 'byebug'
+
 class Path
   FILENAME_REGEX = /([^\/|\\]+$)/
+
+  @@counter = 0 
   
   attr_reader :path, :prefix, :ext, :new_name
+
+  def self.get_count 
+    @@counter 
+  end 
 
   def initialize(path, params)
     @path = path
@@ -17,13 +25,22 @@ class Path
 
   def rename_file!(n)
     File.rename(@path, renamed_path(n))
+    @@counter += 1 
   end 
 
   private 
 
-  def renamed_path(n)
+  def renamed_path(num)
     filename = @path.slice(FILENAME_REGEX)
-    new_name = filename.gsub(/^\w+./, "#{n}_#{@new_name}.")
+
+    name = 
+    if num == 0 
+      "#{@new_name}"
+    else 
+      "#{@new_name}_#{num}"
+    end 
+      
+    new_name = filename.gsub(/^\w+./, "#{name}.")
 
     @path.gsub(filename, new_name)
   end 

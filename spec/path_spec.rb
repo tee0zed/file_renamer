@@ -1,3 +1,4 @@
+
 require 'path'
 
 describe "Path" do 
@@ -55,25 +56,25 @@ describe "Path" do
     let(:params7) {{ name: 'new_name', prefix: nil, ext: '.jpg' }} 
     let(:with_ext_params) { Path.new('/Documents/IMG_123.jpg', params7) }
     it 'renames file correctly if extension param passed' do 
-      expect(with_ext_params.send(:renamed_path, 1)).to eq "/Documents/1_new_name.jpg"
+      expect(with_ext_params.send(:renamed_path, 0)).to eq "/Documents/new_name.jpg"
     end 
 
     let(:params8) {{ name: 'new_name', prefix: nil, ext: nil }}
     let(:without_ext_params) { Path.new('/Documents/IMG_123.jpg', params8) }
     it 'renames file correctly if extension param not passed' do 
-      expect(without_ext_params.send(:renamed_path, 1)).to eq "/Documents/1_new_name.jpg"
+      expect(without_ext_params.send(:renamed_path, 0)).to eq "/Documents/new_name.jpg"
     end 
 
     let(:params9) {{ name: 'new_name', prefix: nil, ext: nil }}
     let(:filename_w_two_dots_with_ext_params) { Path.new('/Documents/IMG_123.html.erb', params9) }
     it 'renames file with two extensions correctly if extension param passed' do 
-      expect(filename_w_two_dots_with_ext_params.send(:renamed_path, 1)).to eq "/Documents/1_new_name.html.erb"
+      expect(filename_w_two_dots_with_ext_params.send(:renamed_path, 0)).to eq "/Documents/new_name.html.erb"
     end 
 
     let(:params10) {{ name: 'new_name', prefix: 'DCIM', ext: '.jpg' }}
     let(:filename_w_two_dots_without_ext_params) { Path.new('/Documents/IMG_123.html.erb', params10) }
     it 'renames file with two extensions correctly if extension param not passed' do 
-      expect(filename_w_two_dots_without_ext_params.send(:renamed_path, 1)).to eq "/Documents/1_new_name.html.erb"
+      expect(filename_w_two_dots_without_ext_params.send(:renamed_path, 0)).to eq "/Documents/new_name.html.erb"
     end 
   end 
 end 
