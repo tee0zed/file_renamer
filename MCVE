@@ -1,0 +1,8 @@
+
+def method(y, z)
+
+  x = z.odd? ? File.directory?(y) : 
+
+  y.is_a?(String) && x 
+end             
+

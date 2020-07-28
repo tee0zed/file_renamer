@@ -1,8 +1,6 @@
+require 'spec_helper'
 
-require 'file_renamer'
-require 'path'
-
-describe "Renamer" do 
+describe "FileRenamer" do 
   context "integral test" do 
     before(:each) { 
         i = 1 
@@ -26,7 +24,8 @@ describe "Renamer" do
 
   let(:params1) {{ dir: "./spec/fixtures/dir/", prefix: "file", ext: "txt", name: "new_name" }}
     it 'renames files correctly' do
-      FileRenamer.rename!(params1)
+      FileRenamer::Path.reset_counter
+      FileRenamer::Renamer.rename!(params1)
       expect(Dir["./spec/fixtures/dir/*"]).to match_array ["./spec/fixtures/dir/new_name.txt", 
                                                            "./spec/fixtures/dir/new_name_1.txt", 
                                                            "./spec/fixtures/dir/new_name_2.txt",
@@ -37,7 +36,8 @@ describe "Renamer" do
 
     let(:params2) {{ dir: "./spec/fixtures/dir/", prefix: "pict", ext: "txt", name: "new_name" }}
     it 'doesnt renames if prefix and ext doesnt match any of files' do
-      FileRenamer.rename!(params2)
+      FileRenamer::Path.reset_counter
+      FileRenamer::Renamer.rename!(params2)
       expect(Dir["./spec/fixtures/dir/*"]).to match_array ["./spec/fixtures/dir/file1.txt", 
                                                            "./spec/fixtures/dir/file2.txt", 
                                                            "./spec/fixtures/dir/file3.txt",
@@ -48,7 +48,8 @@ describe "Renamer" do
 
     let(:params3) {{ dir: "./spec/fixtures/dir/", prefix: nil, ext: "jpg", name: "new_name" }}
     it 'renames files correctly if only ext passed' do
-      FileRenamer.rename!(params3)
+      FileRenamer::Path.reset_counter
+      FileRenamer::Renamer.rename!(params3)
       expect(Dir["./spec/fixtures/dir/*"]).to match_array ["./spec/fixtures/dir/file1.txt", 
                                                            "./spec/fixtures/dir/file2.txt", 
                                                            "./spec/fixtures/dir/file3.txt",
@@ -59,7 +60,8 @@ describe "Renamer" do
 
     let(:params4) {{ dir: "./spec/fixtures/dir/", prefix: "file", ext: "jpg", name: "new_name" }}
     it 'doesnt renames if prefix and ext doesnt match any of files' do
-      FileRenamer.rename!(params4)
+      FileRenamer::Path.reset_counter
+      FileRenamer::Renamer.rename!(params4)
       expect(Dir["./spec/fixtures/dir/*"]).to match_array ["./spec/fixtures/dir/file1.txt", 
                                                            "./spec/fixtures/dir/file2.txt", 
                                                            "./spec/fixtures/dir/file3.txt",
@@ -70,7 +72,8 @@ describe "Renamer" do
 
     let(:params5) {{ dir: "./spec/fixtures/dir/", prefix: 'pict', ext: nil, name: "new_name" }}
     it 'renames files correctly if only prefix passed' do
-      FileRenamer.rename!(params5)
+      FileRenamer::Path.reset_counter
+      FileRenamer::Renamer.rename!(params5)
       expect(Dir["./spec/fixtures/dir/*"]).to match_array ["./spec/fixtures/dir/file1.txt", 
                                                            "./spec/fixtures/dir/file2.txt", 
                                                            "./spec/fixtures/dir/file3.txt",

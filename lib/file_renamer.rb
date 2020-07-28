@@ -1,83 +1,76 @@
-
+require_relative 'file_renamer/version.rb'
 require_relative 'path'
-require 'byebug'
 
-class FileRenamer
-  SLASH = Gem.win_platform? ? '\\' : '/'
-  FILENAME_REGEXP = /^[a-zA-Z_0-9 -]+$/ 
-  EXTENSION_REGEXP = /^[a-zA-Z0-9]{1,4}$/
+module FileRenamer
+  class Renamer
+    SLASH = Gem.win_platform? ? '\\' : '/'
+    FILENAME_REGEXP = /^[a-zA-Z_0-9 -]+$/ 
+    EXTENSION_REGEXP = /^[a-zA-Z0-9]{1,4}$/
 
-  attr_reader :params, :paths 
+    attr_reader :params, :paths 
 
-  def self.rename!(params)
-    session = FileRenamer.new(params)
-    session.get_paths
-    session.rename_files
-  end  
+    def self.rename!(params)
+      session =  FileRenamer::Renamer.new(params)
+      session.get_paths
+      session.rename_files
+    end  
 
-  def initialize(params)
-    @params = params 
-    @paths = []
-  end 
-
-  def get_paths
-    params_correction!
-
-    Dir["#{params[:dir]}*"].each do |path|
-      @paths << Path.new(path, params) 
+    def initialize(params)
+      @params = params 
+      @paths = []
     end 
-  end 
 
-  def rename_files
-    i = 0
-    @paths.each do |p|
-      if p.correct_path?
-        p.rename_file!(i)
-        i+=1
-      end                          
+    def get_paths
+      params_correction!
+
+      Dir["#{params[:dir]}*"].each do |path|
+        @paths <<  FileRenamer::Path.new(path, params) 
+      end 
+    end 
+
+    def rename_files
+      @paths.each { |p| p.rename_file! if p.correct_path? }
+    end 
+
+    private 
+
+    def params_correction!
+      correct_dir
+      correct_name
+      correct_prefix
+      correct_ext
+
+      abort "Directory must exist!" unless @params[:dir]
+      abort "New name must exist!" unless @params[:name]
+    end 
+
+    def correct_dir
+      if @params[:dir].nil? 
+        @params[:dir] = Dir.pwd 
+      else 
+        @params[:dir] << SLASH unless @params[:dir][-1] == SLASH 
+        @params[:dir] = nil unless File.directory?(@params[:dir])
+      end 
     end
-  end 
 
-  private 
-
-  def params_correction!
-    abort "Directory must exist!" unless self.params[:dir]
-    abort "New name must exist!" unless self.params[:name]
-
-    correct_dir
-    correct_name
-    correct_prefix
-    correct_ext
-
-    abort "Directory must exist!" unless self.params[:dir]
-    abort "New name must exist!" unless self.params[:name]
-  end 
-
-  def correct_dir
-    @params[:dir] << SLASH unless @params[:dir][-1] == SLASH 
-    
-    unless File.directory?(@params[:dir])
-      @params[:dir] = nil 
+    def correct_name
+      if @params[:name] && @params[:name].match?(FILENAME_REGEXP)
+        @params[:name] = @params[:name].strip.gsub(' ', '_') 
+      else 
+        @params[:name] = nil 
+      end 
     end 
-  end
 
-  def correct_name
-    if @params[:name] && @params[:name].match?(FILENAME_REGEXP)
-      @params[:name] = @params[:name].strip.gsub(' ', '_') 
-    else 
-      @params[:name] = nil 
+    def correct_prefix
+      @params[:prefix] = @params[:prefix].strip if @params[:prefix]
+    end 
+
+    def correct_ext
+      if @params[:ext] && @params[:ext].match?(EXTENSION_REGEXP)
+        @params[:ext] = '.' + @params[:ext] unless @params[:ext][0] == '.'
+      else 
+        @params[:ext] = nil 
+      end 
     end 
   end 
-
-  def correct_prefix
-    @params[:prefix] = @params[:prefix].strip if @params[:prefix]
-  end 
-
-  def correct_ext
-    if @params[:ext] && @params[:ext].match?(EXTENSION_REGEXP)
-      @params[:ext] = '.' + @params[:ext] unless @params[:ext][0] == '.'
-    else 
-      @params[:ext] = nil 
-    end 
-  end 
-end 
+end
