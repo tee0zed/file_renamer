@@ -1,6 +1,12 @@
+  ![](https://ruby-gem-downloads-badge.herokuapp.com/file_renamer?&style=plastic)
+  [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
+  
+  
 # FileRenamer
 
 Simple bulk file renaming tool.
+
+https://rubygems.org/gems/file_renamer
 
 ## Installation
 
@@ -67,6 +73,8 @@ where
 ## Development
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+TODO: extension change
 
 ## Contributing
 

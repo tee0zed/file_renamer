@@ -1,5 +1,5 @@
 require 'spec_helper'
-
+require 'byebug'
 describe "FileRenamer" do 
   context "Path#correct_path?" do 
     let(:params1) {{ name: 'new_name', prefix: nil, ext: nil }}

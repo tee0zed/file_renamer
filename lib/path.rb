@@ -1,3 +1,4 @@
+require 'byebug'
 
 module FileRenamer
   class Path
@@ -44,8 +45,10 @@ module FileRenamer
       else 
         "#{@new_name}_#{num}"
       end 
-        
-      new_name = filename.gsub(/^\w+./, "#{name}.")
+      
+      name << '.' if filename.match?('\.')
+
+      new_name = filename.gsub(/^\w+./, "#{name}")
 
       @path.gsub(filename, new_name)
     end 

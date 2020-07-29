@@ -4,13 +4,21 @@ require 'optparse'
 require_relative '../lib/file_renamer'
 require_relative '../lib/path'
 
+begin 
+
 params = {}
 OptionParser.new do |opts|
-  opts.on('-n --name STRING', String)
-  opts.on('-p --prefix STRING', String)
-  opts.on('-e --ext STRING', String)
-  opts.on('-d --dir STRING', String)
+  opts.on('-n', '--name STRING', String)
+  opts.on('-p', '--prefix STRING', String)
+  opts.on('-e', '--ext STRING', String)
+  opts.on('-d', '--dir STRING', String)
 end.parse!(into: params)
+
+  rescue OptionParser::MissingArgument 
+    puts "Argument error."
+end 
+
+
 
 FileRenamer::Renamer.rename!(params)
 

@@ -23,8 +23,8 @@ module FileRenamer
     def get_paths
       params_correction!
 
-      Dir["#{params[:dir]}*"].each do |path|
-        @paths <<  FileRenamer::Path.new(path, params) 
+      Dir["#{params[:dir]}*"].sort.each do |path|
+        @paths << FileRenamer::Path.new(path, params) 
       end 
     end 
 
@@ -36,17 +36,21 @@ module FileRenamer
 
     def params_correction!
       correct_dir
+
+      abort "New name must exist!" unless params[:name]
       correct_name
+      
       correct_prefix
       correct_ext
-
+      
+      abort "Incorrect name!" unless @params[:name]
       abort "Directory must exist!" unless @params[:dir]
-      abort "New name must exist!" unless @params[:name]
     end 
 
     def correct_dir
       if @params[:dir].nil? 
-        @params[:dir] = Dir.pwd 
+        @params[:dir] = Dir.pwd
+        @params[:dir] << SLASH
       else 
         @params[:dir] << SLASH unless @params[:dir][-1] == SLASH 
         @params[:dir] = nil unless File.directory?(@params[:dir])
