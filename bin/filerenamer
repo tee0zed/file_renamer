@@ -18,8 +18,6 @@ end.parse!(into: params)
     puts "Argument error."
 end 
 
-
-
 FileRenamer::Renamer.rename!(params)
 
 puts "#{FileRenamer::Path.get_count} paths renamed!"
