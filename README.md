@@ -1,5 +1,5 @@
   ![](https://ruby-gem-downloads-badge.herokuapp.com/file_renamer?&style=plastic)
-  ![](http://badges.github.io/stability-badges/dist/experimental.svg)
+  ![](http://badges.github.io/stability-badges/dist/unstable.svg)
   
 # FileRenamer
 
