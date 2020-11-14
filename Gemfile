@@ -7,3 +7,4 @@ gem "rspec", "~> 3.10"
 gem "rake", "~> 13.0"
 gem "bundler", "~> 2.1"
 gem "thor", "~> 1.0"
+gem 'simplecov', require: false, group: :test

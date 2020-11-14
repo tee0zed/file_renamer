@@ -1,5 +1,8 @@
-  ![](https://ruby-gem-downloads-badge.herokuapp.com/file_renamer?&style=plastic)
-  ![](http://badges.github.io/stability-badges/dist/unstable.svg)
+  ![Downloads](https://ruby-gem-downloads-badge.herokuapp.com/file_renamer?&style=plastic)
+  [![Build Status](https://img.shields.io/travis/tee0zed/file_renamer)](https://travis-ci.org/github/tee0zed/file_renamer)
+  [![Code Coverage](https://img.shields.io/badge/SimpleCov-%2099.46%25-brightgreen)](https://img.shields.io/badge/SimpleCov-%2099.46%25-green)
+  [![Stability]( https://img.shields.io/badge/stability%20-stable-brightgreen)]( https://img.shields.io/badge/stability%20-stable-brightgreen)
+ 
   
 # FileRenamer
 
