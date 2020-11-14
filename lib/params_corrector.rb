@@ -1,10 +1,10 @@
+# frozen_string_literal: true
 
 module FileRenamer
   class ParamsCorrector
-
     SLASH = Gem.win_platform? ? '\\' : '/'
-    FILENAME_REGEXP = /^[a-zA-Z_0-9 -]+$/
-    EXTENSION_REGEXP = /^[a-zA-Z0-9 .]{1,6}$/
+    FILENAME_REGEXP = /^[a-zA-Z_0-9-]+$/.freeze
+    EXTENSION_REGEXP = /^[a-zA-Z0-9_.]{1,6}$/.freeze
 
     attr_accessor :params
 
@@ -23,7 +23,7 @@ module FileRenamer
     end
 
     private
-    
+
     def params_correction!
       params[:dir]    = correct_dir(params[:dir])
       params[:name]   = correct_name(params[:name])
@@ -38,27 +38,25 @@ module FileRenamer
         dir += SLASH if dir[-1] != SLASH
         dir
       else
-        nil
+        raise StandardError.new "Directory must exist!"
       end
     end
 
     def correct_name(name)
-      if "#{name}".match?(FILENAME_REGEXP)
-        name.strip.gsub(' ', '_')
+      if name.to_s.match?(FILENAME_REGEXP)
+        name.strip.chomp
       else
-        nil
+        raise StandardError.new "Incorrect name!"
       end
     end
 
     def correct_prefix(prefix)
-      "#{prefix}".strip
+      prefix.to_s.strip
     end
 
     def correct_ext(ext)
-      if "#{ext}".match?(EXTENSION_REGEXP)
+      if ext.to_s.match?(EXTENSION_REGEXP)
         ext[0] == '.' ? ext : ext.prepend('.')
-      else
-        nil
       end
     end
   end

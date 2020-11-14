@@ -1,7 +1,7 @@
+# frozen_string_literal: true
 
 module FileRenamer
   class NameAlterer
-
     attr_reader :filename,
                 :number,
                 :name
@@ -30,7 +30,7 @@ module FileRenamer
     end
 
     def numbered_name
-      number.zero? ? "#{name}" : "#{name}_#{number}"
+      number.zero? ? name.to_s : "#{name}_#{number}"
     end
-  end 
+  end
 end

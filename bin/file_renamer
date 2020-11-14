@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'optparse'
+require_relative '../lib/path_processor'
+require_relative '../lib/name_alterer'
+require_relative '../lib/params_corrector'
+
+begin
+  params = {}
+  OptionParser.new do |opts|
+    opts.on('-n STRING', '--name', 'new filename (don\'t use spaces!)', String)
+    opts.on('-p STRING', '--prefix', 'prefix of the filename', String)
+    opts.on('-e STRING', '--ext', 'extension of the filename', String)
+    opts.on('-d STRING', '--dir', 'working directory (current by default)', String)
+  end.parse!(into: params)
+rescue OptionParser::MissingArgument
+  puts 'Argument error.'
+end
+
+begin
+  session = FileRenamer::PathProcessor.new({ params: params })
+rescue StandardError => e
+  abort "#{e.message}"
+end
+
+session.rename_files!
+
+puts "#{session.counter} paths renamed!"

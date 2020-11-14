@@ -1,42 +1,43 @@
+# frozen_string_literal: true
+
 require_relative 'name_alterer'
 require_relative 'params_corrector'
 
 module FileRenamer
   class PathProcessor
-
-    attr_accessor :paths,
-                  :counter
+    attr_accessor :counter
 
     attr_reader   :name_alterer,
-                  :params_corrector,
                   :extension,
                   :name,
                   :prefix,
-                  :directory
+                  :directory,
+                  :paths,
+                  :params
 
-    def initialize(args = {})
-      @params_corrector = args.fetch(:params_corrector, ParamsCorrector)
-      @name_alterer  = args.fetch(:name_alterer, NameAlterer)
+    def self.run!(args = {})
+      self.new(args).rename_files!
+    end
 
-      init_corrected_params(args[:params])
+    def initialize(args)
+      @params       = args[:corrected_params] || ParamsCorrector.new.corrected_params(args[:params])
+      @name_alterer = args.fetch(:name_alterer, NameAlterer.new)
 
-      @paths = get_paths
+      init_corrected_params
+
+      @paths   = paths
       @counter = 0
     end
 
     def rename_files!
       paths.each do |path|
-        if should_be_renamed?(path)
-          process_path(path)
-        end
+        process_path(path) if should_be_renamed?(path)
       end
     end
 
     private
 
-    def init_corrected_params(params)
-      params = params_corrector.new.corrected_params(params)
-
+    def init_corrected_params
       @extension = params[:ext]
       @name      = params[:name]
       @directory = params[:dir]
@@ -45,7 +46,7 @@ module FileRenamer
 
     def process_path(path)
       old_filename = slice_filename(path)
-      renamed_filename = name_alterer.new.renamed_filename({ filename: old_filename,
+      renamed_filename = name_alterer.renamed_filename({ filename: old_filename,
                                                              number: counter,
                                                              new_name: name })
 
@@ -67,7 +68,7 @@ module FileRenamer
       matches_pattern?(path) && is_file?(path)
     end
 
-    def get_paths
+    def paths
       Dir["#{directory}*"].sort
     end
 
@@ -80,7 +81,7 @@ module FileRenamer
     end
 
     def slice_filename(path)
-      path.slice(/([^\/|\\]+$)/)
+      path.slice(%r{([^/|\\]+$)})
     end
   end
 end

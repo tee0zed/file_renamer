@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ### From terminal
 
-    filerenamer [options]
+    file_renamer [options]
     -d --dir (optional)
     -p --prefix (optional)
     -e --extension (optional)
@@ -62,12 +62,19 @@ Or install it yourself as:
 
 ### In your project 
 
-    FileRenamer::Renamer.rename!(params) 
+    FileRenamer::PathProcessor.run!(params) 
+    
 where 
- - params[:dir] - for execution directory (required)
- - params[:prefix] - for filename's prefixes 
- - params[:ext] - for filename's extensions
- - params[:name] - for filename's new names (required)
+  - params[:dir] - for execution directory (required)
+  - params[:prefix] - for filename's prefixes 
+  - params[:ext] - for filename's extensions
+  - params[:name] - for filename's new names (required)
+ 
+ or 
+  - corrected_params[:dir] - for execution directory (required)
+  - corrected_params[:prefix] - for filename's prefixes 
+  - corrected_params[:ext] - for filename's extensions
+  - corrected_params[:name] - for filename's new names (required)
 
 ## Development
 
