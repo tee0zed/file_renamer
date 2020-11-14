@@ -13,17 +13,14 @@ module FileRenamer
     end
 
     def renamed_filename(args)
-      init_params(args)
+      @filename = args[:filename]
+      @number   = args[:number]
+      @name     = args[:new_name]
+
       name_with_extension
     end
 
     private
-
-    def init_params(args)
-      @filename = args[:filename]
-      @number   = args[:number]
-      @name     = args[:new_name]
-    end
 
     def name_with_extension
       filename.gsub(/^\w+./, "#{numbered_name}.")

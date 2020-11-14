@@ -12,21 +12,23 @@ module FileRenamer
                   :name,
                   :prefix,
                   :directory,
-                  :paths,
-                  :params
+                  :paths
 
     def self.run!(args = {})
       self.new(args).rename_files!
     end
 
     def initialize(args)
-      @params       = args[:corrected_params] || ParamsCorrector.new.corrected_params(args[:params])
+      params       = args[:corrected_params] || ParamsCorrector.new.corrected_params(args[:params])
+
+      @extension    = params[:ext]
+      @name         = params[:name]
+      @directory    = params[:dir]
+      @prefix       = params[:prefix]
+
       @name_alterer = args.fetch(:name_alterer, NameAlterer.new)
-
-      init_corrected_params
-
-      @paths   = paths
-      @counter = 0
+      @paths        = paths
+      @counter      = 0
     end
 
     def rename_files!
@@ -37,18 +39,11 @@ module FileRenamer
 
     private
 
-    def init_corrected_params
-      @extension = params[:ext]
-      @name      = params[:name]
-      @directory = params[:dir]
-      @prefix    = params[:prefix]
-    end
-
     def process_path(path)
-      old_filename = slice_filename(path)
+      old_filename = sliced_filename(path)
       renamed_filename = name_alterer.renamed_filename({ filename: old_filename,
-                                                             number: counter,
-                                                             new_name: name })
+                                                         number: counter,
+                                                         new_name: name })
 
       renamed_path = renamed_path(path, old_filename, renamed_filename)
 
@@ -73,14 +68,14 @@ module FileRenamer
     end
 
     def matches_pattern?(path)
-      slice_filename(path).match?(Regexp.new("^#{prefix}.*#{extension}$"))
+      sliced_filename(path).match?(Regexp.new("^#{prefix}.*#{extension}$"))
     end
 
     def is_file?(path)
       !File.directory?(path)
     end
 
-    def slice_filename(path)
+    def sliced_filename(path)
       path.slice(%r{([^/|\\]+$)})
     end
   end

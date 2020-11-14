@@ -14,12 +14,6 @@ describe 'ParamsCorrector#corrected_params' do
       expect(corrected_params[:ext]).to eq '.jpg'
     end
 
-    let(:params1) { { ext: '.jpg', dir: './spec/fixtures/dir/', prefix: nil, name: 'new_name' } }
-    it 'return ext string with dot if ext not nil' do
-      corrected_params = @corrector.corrected_params(params1)
-      expect(corrected_params[:ext]).to eq '.jpg'
-    end
-
     let(:params2) { { ext: 'jpganyany', dir: './spec/fixtures/dir/', prefix: nil, name: 'new_name' } }
     it 'return nil if ext not matches regexp' do
       corrected_params = @corrector.corrected_params(params2)
