@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby 2.7
+ruby ">=2.7"
 
 # Specify your gem's dependencies in file_renamer.gemspec
 gem "rspec", "~> 3.10"
