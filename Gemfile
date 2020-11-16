@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+ruby 2.7
+
 # Specify your gem's dependencies in file_renamer.gemspec
 gem "rspec", "~> 3.10"
 gem "rake", "~> 13.0"

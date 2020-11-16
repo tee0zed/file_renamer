@@ -71,7 +71,7 @@ describe 'PathProcessor#rename_files' do
     end
   end
 
-  context 'when prefix and ext doesnt match any of files' do
+  context 'when prefix and ext doesnt matches any of files' do
     let(:args) { { params: { dir: './spec/fixtures/dir/', prefix: 'pict', ext: 'txt', name: 'new_name' } } }
 
     it 'renames nothing' do
@@ -99,6 +99,22 @@ describe 'PathProcessor#rename_files' do
         ./spec/fixtures/dir/pict1.jpg
         ./spec/fixtures/dir/pict2.jpg
         ./spec/fixtures/dir/pict3.jpg
+      ]
+    end
+  end
+
+  context 'when nor prefix neither ext passed' do
+    let(:args) { { params: { dir: './spec/fixtures/dir/', prefix: nil, ext: nil, name: 'new_name' } } }
+
+    it 'renames everything' do
+      FileRenamer::PathProcessor.run!(args)
+      expect(Dir['./spec/fixtures/dir/*']).to match_array %w[
+        ./spec/fixtures/dir/new_name.txt
+        ./spec/fixtures/dir/new_name_1.txt
+        ./spec/fixtures/dir/new_name_2.txt
+        ./spec/fixtures/dir/new_name_3.jpg
+        ./spec/fixtures/dir/new_name_4.jpg
+        ./spec/fixtures/dir/new_name_5.jpg
       ]
     end
   end
